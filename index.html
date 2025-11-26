@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ESMERALDA Lista de tareas</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Encabezado -->
+    <header>
+      <div class="titulo">
+        <h1> ESMERALDA</h1>
+        <h2>Lista de tareas</h2>
+      </div>
+      <div class="botones-superiores">
+      <a href="calendario.html" class="boton-link">Calendario</a>
+      <a href="anotaciones.html" class="boton-link">Anotaciones</a>
+      </div>
+    </header>
+
+    <!-- Botón Agregar Nota -->
+    <section class="agregar-nota">
+      <button id="agregarNota">Agregar Nota</button>
+    </section>
+
+    <!-- Formulario tipo agenda -->
+    <section id="formulario" class="formulario-oculto">
+      <form id="notaForm">
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required />
+
+        <label for="hora">Hora:</label>
+        <input type="time" id="hora" name="hora" />
+
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+
+        <label for="prioridad">Prioridad:</label>
+        <select id="prioridad" name="prioridad">
+          <option value="baja">Baja</option>
+          <option value="media">Media</option>
+          <option value="alta">Alta</option>
+        </select>
+
+        <button type="submit">Guardar Nota</button>
+      </form>
+    </section>
+    <h3>Tareas pendientes</h3>
+    <main class="notas" id="pendientes"></main>
+
+    <h3>Tareas completadas</h3>
+    <main class="notas" id="completadas"></main>
+    <!-- Contenedor de notas -->
+    <main class="notas" id="contenedorNotas">
+      <!-- Las notas aparecerán aquí -->
+    </main>
+  </div>
+
+  <!-- Script para mostrar formulario y agregar notas -->
+  <script>
+  const btnAgregar = document.getElementById('agregarNota');
+  const formulario = document.getElementById('formulario');
+  const notaForm = document.getElementById('notaForm');
+  const pendientes = document.getElementById('pendientes');
+  const completadas = document.getElementById('completadas');
+
+  const API_URL = 'http://localhost:3000/api/tareas';
+
+  // Mostrar/ocultar formulario
+  btnAgregar.addEventListener('click', () => {
+    formulario.classList.toggle('visible');
+  });
+
+  // Cargar tareas al iniciar
+  window.addEventListener('DOMContentLoaded', cargarTareas);
+
+  function cargarTareas() {
+    fetch(API_URL)
+      .then(res => res.json())
+      .then(tareas => {
+        pendientes.innerHTML = '';
+        completadas.innerHTML = '';
+        tareas.forEach(tarea => renderTarea(tarea));
+      });
+  }
+
+  // Crear nueva tarea
+  notaForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const nuevaTarea = {
+      titulo: document.getElementById('descripcion').value,
+      descripcion: document.getElementById('descripcion').value,
+      fecha: document.getElementById('fecha').value,
+      hora: document.getElementById('hora').value,
+      prioridad: document.getElementById('prioridad').value,
+    };
+
+    fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(nuevaTarea)
+    })
+    .then(res => res.json())
+    .then(() => {
+      notaForm.reset();
+      formulario.classList.remove('visible');
+      cargarTareas();
+    });
+  });
+
+  // Renderizar una tarea
+  function renderTarea(tarea) {
+    const nota = document.createElement('div');
+    nota.classList.add('nota');
+    if (tarea.completada) nota.classList.add('completada');
+
+    nota.innerHTML = `
+      <strong>${tarea.fecha || ''} ${tarea.hora || ''}</strong>
+      <p>${tarea.descripcion}</p>
+      <span>Prioridad: ${tarea.prioridad}</span>
+      <div class="acciones">
+        <button class="completar">✔</button>
+        <button class="editar">✏️</button>
+        <button class="eliminar">🗑️</button>
+      </div>
+    `;
+
+    // Completar
+    nota.querySelector('.completar').addEventListener('click', () => {
+      fetch(`${API_URL}/${tarea.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...tarea, completada: 1 })
+      }).then(() => cargarTareas());
+    });
+
+    // Eliminar
+    nota.querySelector('.eliminar').addEventListener('click', () => {
+      fetch(`${API_URL}/${tarea.id}`, {
+        method: 'DELETE'
+      }).then(() => cargarTareas());
+    });
+
+    // Editar
+    nota.querySelector('.editar').addEventListener('click', () => {
+      document.getElementById('fecha').value = tarea.fecha;
+      document.getElementById('hora').value = tarea.hora;
+      document.getElementById('descripcion').value = tarea.descripcion;
+      document.getElementById('prioridad').value = tarea.prioridad;
+      formulario.classList.add('visible');
+
+      notaForm.onsubmit = (e) => {
+        e.preventDefault();
+        const tareaActualizada = {
+          titulo: document.getElementById('descripcion').value,
+          descripcion: document.getElementById('descripcion').value,
+          fecha: document.getElementById('fecha').value,
+          hora: document.getElementById('hora').value,
+          prioridad: document.getElementById('prioridad').value,
+          completada: tarea.completada
+        };
+
+        fetch(`${API_URL}/${tarea.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(tareaActualizada)
+        }).then(() => {
+          notaForm.reset();
+          formulario.classList.remove('visible');
+          notaForm.onsubmit = defaultSubmitHandler;
+          cargarTareas();
+        });
+      };
+    });
+
+    if (tarea.completada) {
+      completadas.appendChild(nota);
+    } else {
+      pendientes.appendChild(nota);
+    }
+  }
+
+  // Restaurar comportamiento original del submit
+  const defaultSubmitHandler = notaForm.onsubmit;
+</script>
+</body>
+</html>
