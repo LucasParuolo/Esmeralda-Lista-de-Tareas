@@ -91,3 +91,31 @@ width: 100%;
   border-radius: 6px;
   font-weight: bold;
 }
+
+.navbar-verde {
+    background-color: #45b745 !important; /* Verde claro */
+}
+
+.navbar-verde .nav-link,
+.navbar-verde .navbar-brand {
+    color: white !important;
+}
+
+.nombre-sitio {
+    font-family: "Poppins", sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #064d2f, #0a7b4f);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+}
+
+/*
+font-family: "Poppins", sans-serif;
+    font-style: italic;
+    font-size: 28px;
+    font-weight: 700;
+    color: #064d2f; 
+    margin-right: 20px;
+*/
