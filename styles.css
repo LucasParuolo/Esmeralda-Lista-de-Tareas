@@ -1,0 +1,184 @@
+/* Fondo estrellado y fuente */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-image: url('Imagenes/cielo.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #fff;
+}
+/* Contenedor principal */
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Encabezado con título y botones */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: rgba(30, 30, 60, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.titulo {
+  text-align: left;
+}
+
+.titulo h1 {
+  font-size: 2.5rem;
+  color: #a8ff60;
+  margin: 0;
+}
+
+.titulo h2 {
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin-top: 5px;
+}
+
+.boton-link {
+  display: inline-block;
+  padding: 10px 16px;
+  background-color: #3a3a5a;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.botones-superiores button {
+  padding: 10px 16px;
+  background-color: #3a3a5a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Botón Agregar Nota */
+.agregar-nota {
+  text-align: center;
+  margin: 30px 0;
+}
+
+#agregarNota {
+  padding: 12px 24px;
+  background-color: #60d394;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Contenedor de notas vacío */
+.notas {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.nota button {
+  margin-top: 10px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.nota .acciones button {
+  background-color: #3a3a5a;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.nota .acciones button:hover {
+  background-color: #5a5a7a;
+}
+
+.nota.completada {
+  background-color: #d3ffd3;
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+/* Formulario tipo agenda */
+#formulario {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: none;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#formulario.visible {
+  display: block;
+}
+
+form {
+  display: grid;
+  gap: 15px;
+}
+
+form label {
+  font-weight: bold;
+}
+
+form input,
+form textarea,
+form select,
+form button {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+form input,
+form textarea,
+form select {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+form button {
+  background-color: #a8ff60;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+}
+.notas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.nota {
+  background-color: rgba(255, 255, 255, 0.85);
+  color: #333;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 1rem;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+  width: 250px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
