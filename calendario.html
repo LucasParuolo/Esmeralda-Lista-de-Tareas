@@ -4,10 +4,17 @@
     <meta charset="UTF-8" />
     <title>Calendario-Esmeralda</title>
     <link rel="stylesheet" href="style-calendario.css">
+    <link rel="stylesheet" href="tareas-temporales.js">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script>
-    marcarFechasConTareas();
+        // Ejemplos de tareas (pueden venir luego de SQLite)
+        window.tareas = {
+         "2025-01-10": ["Reunión importante", "Enviar informe"],
+         "2025-02-14": ["Examen parcial"],
+         "2025-03-05": ["Entrega de proyecto"],
+    };
     </script>
+    
 <style>
     .dia {
         display: inline-block;
